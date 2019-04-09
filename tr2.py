@@ -38,6 +38,8 @@
 # 04.04.2019:                                                       #
 #       : Added configurable options for: default language,         #
 #       : autotranslate on/off, and translate while away on/off.    #
+# 04.08.2019:                                                       #
+#       : fixed sanitation order.                                   #
 #                                                                   #
 # KNOWN ISSUES:                                                     #
 #   Some languages come through as a long string which cannot be    #
@@ -157,10 +159,10 @@ def translate(transfrom, transto, text):
     return tr
 
 
-def sanatize(message):
-    m = re.sub(r'[]+=_.:,;"!@#$%^&*()<>\\/{}[]\d*', '', message)
-    m = re.sub(r'^[^:]*: ', '', m)
-    m = re.sub(r'^[.!].*\s*', '', m)
+def sanitize(message):
+    m = re.sub(r'^[^:]*: ', '', message)
+    m = re.sub(r'^[.!].*/s*', '', m)
+    m = re.sub(r'[]+=_.:,;"!@#$%^&*()<>\\/{}[]*\d*', '', m)
     return m
 
 
@@ -176,7 +178,7 @@ def autoTrans(data, buffer, date, tags, displayed, highlight, prefix, message):
 
     DetectorFactory.seed = 0
 
-    m = sanatize(message)
+    m = sanitize(message)
 
     if py3():
         msg = m
