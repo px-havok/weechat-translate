@@ -161,7 +161,7 @@ def translate(transfrom, transto, text):
 
 def sanitize(message):
     m = re.sub(r'^[^:]*: ', '', message)
-    m = re.sub(r'^[.!].*/s*', '', m)
+    m = re.sub(r'^[.!].*?(?=\s)', '', m)
     m = re.sub(r'[]+=_.:,;"!@#$%^&*()<>\\/{}[]*\d*', '', m)
     return m
 
